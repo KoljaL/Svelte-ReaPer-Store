@@ -1,6 +1,7 @@
 <script>
 	import '$lib/pico.css';
 	import '$lib/app.css';
+	import { page } from '$app/state';
 
 	let { children } = $props();
 
@@ -13,21 +14,46 @@
 </script>
 
 <nav>
-	<a href="/">Home</a>
-	<a href="/One">One</a>
-	<a href="/Two">Two</a>
-	<button onclick={logLocalStorage}>Log Local Storage</button>
-	<button onclick={clearLocalStorage}>Clear Local Storage</button>
+	<ul>
+		<li>
+			<a href="/#" aria-current={page.url.pathname === '/'}>Home</a>
+		</li>
+		<li>
+			<a href="/One" aria-current={page.url.pathname === '/One'}>One</a>
+		</li>
+		<li>
+			<a href="/Two" aria-current={page.url.pathname === '/Two'}>Two</a>
+		</li>
+	</ul>
+	<div role="group">
+		<button
+			class="inline"
+			onclick={logLocalStorage}
+			data-placement="left"
+			data-tooltip="See LocalStorage in console output">Log</button
+		>
+		<button
+			class="inline"
+			onclick={clearLocalStorage}
+			data-placement="left"
+			data-tooltip="Remove all entries from LocalStorage">Clear</button
+		>
+	</div>
 </nav>
 
-{@render children()}
+<main class="container">
+	{@render children()}
+</main>
 
 <style>
-	nav {
-		padding: 1em;
+	a[aria-current='true'] {
+		color: var(--pico);
 	}
 
-	nav a {
-		margin-right: 1em;
+	div[role='group'] {
+		display: flex;
+		justify-content: space-between;
+		width: min-content;
+		height: 2rem;
 	}
 </style>

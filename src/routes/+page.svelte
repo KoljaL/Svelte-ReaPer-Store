@@ -2,12 +2,12 @@
 	import { reaperStore, ReaPerStore } from '$lib/ReaPerStore';
 
 	// Set a global prefix
-	ReaPerStore.setPrefix('myApp:user');
+	ReaPerStore.setPrefix('myApp:');
 
 	// Initialize some individual stores
-	const userStore1 = new ReaPerStore('user:1', { name: 'Alice', age: 25 });
-	const userStore2 = new ReaPerStore('user:2', { name: 'Bob', age: 30 });
-	const userStore3 = new ReaPerStore('user:3', { name: 'Charlie', age: 35 });
+	const userStore1 = reaperStore('user:1', { name: 'Alice', age: 25 });
+	const userStore2 = reaperStore('user:2', { name: 'Bob', age: 30 });
+	const userStore3 = reaperStore('user:3', { name: 'Charlie', age: 35 });
 
 	// Retrieve all entries with the defined prefix
 	let entries = ReaPerStore.getEntriesWithPrefix();
@@ -17,51 +17,101 @@
 		entries = ReaPerStore.getEntriesWithPrefix();
 	};
 
-	// Example handler to update an entry
-	const updateUser1 = () => {
-		$userStore1 = { ...$userStore1, age: $userStore1.age + 1 };
-		refreshEntries();
-	};
+	function updateUser(userstore) {
+		return () => {
+			userstore.update((data) => {
+				data.age++;
+				return data;
+			});
+			refreshEntries();
+		};
+	}
+
+	// Import data
+	let importMessage = 'Import Data';
+	let importFileData = false;
+
+	function handleUpload(event) {
+		const file = event.target.files[0];
+		if (file) {
+			importFileData = file;
+		}
+	}
+
+	function importData() {
+		ReaPerStore.importFromFile(importFileData);
+		console.log(importFileData);
+		importMessage = 'Data imported successfully';
+	}
 </script>
 
-<div class="container">
-	<h1>Home</h1>
+<h3>Manage Multiple Entries with the Same Prefix</h3>
+<div class="row">
+	<div class="left">
+		<div class="entry">
+			<p>
+				User 1: {$userStore1.name}, Age: {$userStore1.age}
+				<button class="inline" onclick={updateUser(userStore1)}>Increase Age</button>
+			</p>
+		</div>
 
-	<h2>Manage Multiple Entries with the Same Prefix</h2>
+		<div class="entry">
+			<p>
+				User 2: {$userStore2.name}, Age: {$userStore2.age}
+				<button class="inline" onclick={updateUser(userStore2)}>Increase Age</button>
+			</p>
+		</div>
 
-	<div class="entry">
-		<p>User 1: {$userStore1.name}, Age: {$userStore1.age}</p>
-		<button on:click={updateUser1}>Increase Age</button>
+		<div class="entry">
+			<p>
+				User 3: {$userStore3.name}, Age: {$userStore3.age}
+				<button class="inline" onclick={updateUser(userStore3)}>Increase Age</button>
+			</p>
+		</div>
 	</div>
 
-	<div class="entry">
-		<p>User 2: {$userStore2.name}, Age: {$userStore2.age}</p>
+	<div class="right">
+		<ul>
+			{#each Object.entries(entries) as [key, value]}
+				<li><strong>{key}</strong>: {value}</li>
+			{/each}
+		</ul>
 	</div>
+</div>
+<hr />
 
-	<div class="entry">
-		<p>User 3: {$userStore3.name}, Age: {$userStore3.age}</p>
+<h3>Export & Import</h3>
+<div class="row">
+	<div class="left">
+		<button
+			onclick={() => {
+				ReaPerStore.exportWithPrefix();
+			}}>Export Data</button
+		>
 	</div>
-
-	<hr />
-
-	<h2>All Entries with Prefix</h2>
-	<ul>
-		{#each Object.entries(entries) as [key, value]}
-			<li><strong>{key}</strong>: {value}</li>
-		{/each}
-	</ul>
+	<div class="right">
+		<input type="file" accept=".json" onchange={handleUpload} />
+		{#if importFileData}
+			<button onclick={importData}> {importMessage} </button>
+		{/if}
+	</div>
 </div>
 
 <style>
-	.container {
-		padding: 2rem;
-	}
-
 	.entry {
 		margin-bottom: 1rem;
 	}
 
-	button {
-		margin-left: 1rem;
+	.row {
+		display: flex;
+		justify-content: space-between;
 	}
+	.left {
+		width: 45%;
+	}
+	.right {
+		width: 45%;
+	}
+
+	/* Optional: adjust button styles */
 </style>

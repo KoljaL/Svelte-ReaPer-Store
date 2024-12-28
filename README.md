@@ -15,6 +15,15 @@
 - **Multi-Tab Sync**: Reflects changes across browser tabs in real time.
 - **Key Prefixing**: Organize and namespace your keys in `localStorage`.
 - **Easy Management**: Retrieve or clear all keys with a specific prefix.
+- **Export & Import**: Easily export and import store data as JSON for backup or sharing.
+
+
+## Demo
+
+Live demo coming soon!
+
+Styled with [Pico CSS • Minimal CSS Framework for semantic HTML](https://picocss.com/)
+
 
 ## Installation
 
@@ -27,7 +36,7 @@ Install via npm:
 
 ### Basic Example
 
-```javascript
+```html
 <script>
   import { reaperStore } from 'reaper-store';
 

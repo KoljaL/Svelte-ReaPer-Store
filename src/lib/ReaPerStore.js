@@ -30,6 +30,8 @@ export class ReaPerStore {
 		// Listen for changes from other tabs and update the store
 		if (typeof window !== 'undefined') {
 			window.addEventListener('storage', (event) => {
+				console.log('Storage event:', event);
+				console.log('Storage event:', event.key, event.newValue);
 				if (event.key === this.#key && event.newValue) {
 					this.#store.set(JSON.parse(event.newValue));
 				}
@@ -103,6 +105,43 @@ export class ReaPerStore {
 		}
 
 		keysToRemove.forEach((key) => window.localStorage.removeItem(key));
+	}
+
+	/**
+	 * Export all entries in localStorage with the defined prefix as a JSON string and let the user download it.
+	 */
+	static exportWithPrefix() {
+		const entries = ReaPerStore.getEntriesWithPrefix();
+		const blob = new Blob([JSON.stringify(entries)], { type: 'application/json' });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = 'reaperstore-export.json';
+		a.click();
+		URL.revokeObjectURL(url);
+	}
+
+	/**
+	 * Import entries from a JSON file and store them in localStorage.
+	 * @param {File} file
+	 */
+	static importFromFile(file) {
+		const reader = new FileReader();
+		reader.onload = (event) => {
+			const entries = JSON.parse(event.target.result);
+			try {
+				Object.entries(entries).forEach(([key, value]) => {
+					window.localStorage.setItem(key, value);
+				});
+				// trigger event to update all stores
+				window.dispatchEvent(new Event('storage'));
+				// log success message
+				console.log('Data imported successfully.', window.localStorage);
+			} catch (error) {
+				console.log('Error importing data:', error);
+			}
+		};
+		reader.readAsText(file);
 	}
 }
 // Factory function to create a new ReaPerStore instance
