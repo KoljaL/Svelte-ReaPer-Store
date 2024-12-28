@@ -1,7 +1,8 @@
 
 <div style="border: 1px solid red; background-color:rgb(131, 54, 54); padding: 10px; border-radius: 5px;">
   <strong>⚠️ Warning</strong><br>
-  This lib is still in development and not yet published to npm. Use at your own risk.
+  This lib is still in development and not yet published to npm. Use at your own risk.  
+  And it does not uses Runes yet, but should run fine on Svelte 5.
 </div>
 
 # ReaPerStore

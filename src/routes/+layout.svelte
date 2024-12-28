@@ -19,10 +19,7 @@
 			<a href="/#" aria-current={page.url.pathname === '/'}>Home</a>
 		</li>
 		<li>
-			<a href="/One" aria-current={page.url.pathname === '/One'}>One</a>
-		</li>
-		<li>
-			<a href="/Two" aria-current={page.url.pathname === '/Two'}>Two</a>
+			<a href="/Counter" aria-current={page.url.pathname === '/Counter'}>Counter</a>
 		</li>
 	</ul>
 	<div role="group">
