@@ -3,6 +3,8 @@
 	import '$lib/app.css';
 	import { page } from '$app/state';
 
+	import { base } from '$app/paths';
+
 	let { children } = $props();
 
 	function clearLocalStorage() {
@@ -16,10 +18,10 @@
 <nav>
 	<ul>
 		<li>
-			<a href="/#" aria-current={page.url.pathname === '/'}>Home</a>
+			<a href="{base}/" aria-current={page.url.pathname === '/'}>Home</a>
 		</li>
 		<li>
-			<a href="/Counter" aria-current={page.url.pathname === '/Counter'}>Counter</a>
+			<a href="{base}/Counter" aria-current={page.url.pathname === '/Counter'}>Counter</a>
 		</li>
 	</ul>
 	<div role="group">
