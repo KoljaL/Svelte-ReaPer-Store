@@ -21,7 +21,7 @@
 
 ## Demo
 
-Live demo coming soon!
+Live demo on gh-pages: [ReaPerStore Demo](https://koljal.github.io/Svelte-ReaPer-Store/)
 
 Styled with [Pico CSS • Minimal CSS Framework for semantic HTML](https://picocss.com/)
 
